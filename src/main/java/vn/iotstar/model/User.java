@@ -6,14 +6,20 @@ import java.sql.Date;
 @SuppressWarnings("serial")
 public class User implements Serializable {
     private int id;
-    private String email;
+    public User() {
 
-    public String getUserName() {
-        return userName;
     }
 
-    public void setUserName(String userName) {
+
+    public User(String email, String userName, String fullName, String passWord, String avatar, int roleid, String phone, Date createdDate) {
+        this.email = email;
         this.userName = userName;
+        this.fullName = fullName;
+        this.passWord = passWord;
+        this.avatar = avatar;
+        this.roleid = roleid;
+        this.phone = phone;
+        this.createdDate = createdDate;
     }
 
     public int getId() {
@@ -30,6 +36,14 @@ public class User implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getFullName() {
@@ -80,6 +94,7 @@ public class User implements Serializable {
         this.createdDate = createdDate;
     }
 
+    private String email;
     private String userName;
     private String fullName;
     private String passWord;
