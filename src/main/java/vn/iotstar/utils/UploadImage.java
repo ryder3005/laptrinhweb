@@ -41,12 +41,12 @@ public class UploadImage {
         Files.createDirectories(uploadPath); // Sẽ tạo thư mục nếu chưa có và không ném ngoại lệ nếu đã tồn tại
 
         // Tên file mới bằng UUID
-        String newFileName = UUID.randomUUID().toString() + ext;
+        String newFileName = UUID.randomUUID().toString().substring(0, 8) + ext;
 
         // Lưu file lên disk
         Path filePath = uploadPath.resolve(newFileName);
         filePart.write(filePath.toString());
 
-        return newFileName;
+        return subFolder+"/"+newFileName;
     }
 }
