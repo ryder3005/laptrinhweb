@@ -1,5 +1,9 @@
 package vn.iotstar.controler.product;
 
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.List;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -14,10 +18,6 @@ import vn.iotstar.service.ProductService;
 import vn.iotstar.service.implement.CategoryServiceImpl;
 import vn.iotstar.service.implement.ProductServiceImpl;
 import vn.iotstar.utils.UploadImage;
-
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.List;
 @MultipartConfig(
         fileSizeThreshold = 1024 * 1024,  // 1 MB
         maxFileSize = 1024 * 1024 * 10,       // 10 MB
