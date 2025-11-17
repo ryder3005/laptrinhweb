@@ -37,6 +37,10 @@
     <div class="row justify-content-center">
 
         <div class="col-xl-10 col-lg-12 col-md-9">
+            <%
+        String message = (String) request.getAttribute("alert");
+        
+    %>
 
             <div class="card o-hidden border-0 shadow-lg my-5">
                 <div class="card-body p-0">
@@ -47,6 +51,7 @@
                             <div class="p-5">
                                 <div class="text-center">
                                     <h1 class="h4 text-gray-900 mb-4">Đăng nhập</h1>
+                                    <div class="text-danger"><%= message != null ? message : "" %>
                                 </div>
                                 <form class="user" method ="POST">
                                     <div class="form-group">

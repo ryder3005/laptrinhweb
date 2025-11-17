@@ -67,7 +67,7 @@ public class LoginController extends HttpServlet {
             if (isRememberMe){
                 saveRemeberMe(resp, email);
             }
-
+            req.setAttribute("message","xin chao" + user.getUserName());
             // Chuyển hướng về trang home hoặc dashboard
             resp.sendRedirect(req.getContextPath() + "/waiting");
 

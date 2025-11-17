@@ -1,10 +1,13 @@
 package vn.iotstar.dao.implement;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import vn.iotstar.connection.DBConnection;
 import vn.iotstar.dao.UserDao;
 import vn.iotstar.model.User;
-
-import java.sql.*;
 
 public class UserDaoImpl implements UserDao {
     public Connection conn=null;
@@ -13,9 +16,9 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User get(String username) {
-        String sql = "SELECT * FROM users WHERE username = ?";
-        try (Connection conn = DBConnection.getDBConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        String sql = "SELECT * FROM users WHERE email = ?";
+        try (Connection localConn = DBConnection.getDBConnection();
+             PreparedStatement ps = localConn.prepareStatement(sql)) {
 
             ps.setString(1, username);
             try (ResultSet rs = ps.executeQuery()) {
@@ -41,7 +44,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void insert(User user) {
         String sql = "INSERT INTO `users` (email, username, fullname, password, avatar, roleid, phone, createddate) VALUES (?,?,?,?,?,?,?,?)";
-        try (Connection conn = new DBConnection().getDBConnection();
+        try (Connection conn = DBConnection.getDBConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, user.getEmail());
@@ -65,7 +68,7 @@ public class UserDaoImpl implements UserDao {
         boolean duplicate = false;
         String query = "SELECT * FROM `users` WHERE email = ?";
         try {
-            conn = new DBConnection().getDBConnection();
+            conn = DBConnection.getDBConnection();
             ps = conn.prepareStatement(query);
             ps.setString(1, email);
             rs = ps.executeQuery();
@@ -85,7 +88,7 @@ public class UserDaoImpl implements UserDao {
         boolean duplicate = false;
         String query = "select * from [User] where username = ?";
         try {
-            conn = new DBConnection().getDBConnection();
+            conn = DBConnection.getDBConnection();
             ps = conn.prepareStatement(query);
             ps.setString(1, username);
             rs = ps.executeQuery();
@@ -102,5 +105,27 @@ public class UserDaoImpl implements UserDao {
     @Override
     public boolean checkExistPhone(String phone) {
         return false;
+    }
+
+    @Override
+    public boolean changePassword(String email, String newPassword) {
+        String sql = "UPDATE users SET password = ? WHERE email = ?";
+        try (Connection conn = DBConnection.getDBConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, newPassword);
+            ps.setString(2, email);
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    @Override
+    public boolean sendResetPasswordEmail(String email, String token) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'sendResetPasswordEmail'");
     }
 }

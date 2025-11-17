@@ -8,5 +8,6 @@ public interface UserDao {
     boolean checkExistEmail(String email);
     boolean checkExistUsername(String username);
     boolean checkExistPhone(String phone);
-
+    boolean changePassword(String email, String newPassword);
+    boolean sendResetPasswordEmail(String email, String token);
 }

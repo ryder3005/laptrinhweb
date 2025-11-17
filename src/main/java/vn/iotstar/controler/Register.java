@@ -2,14 +2,11 @@ package vn.iotstar.controler;
 
 
 import java.io.IOException;
+
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
-import com.google.api.client.googleapis.auth.oauth2.*;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.services.oauth2.*;
-import com.google.api.services.oauth2.model.Userinfo;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 //@WebServlet("/register")
 public class Register extends HttpServlet {

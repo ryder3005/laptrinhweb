@@ -39,4 +39,4 @@ build/
 
 vendor/
 src/main/java/vn/iotstar/controler/LoginGoogle.java
-.env
+src/main/resources/.env

@@ -15,14 +15,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet (urlPatterns = {"/admin/category/list"})
-public class CategoryEditController extends HttpServlet {
+public class CategoryController extends HttpServlet {
     CategoryService categoryService=new CategoryServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Category> cateList=new ArrayList<>();
+        List<Category> cateList = new ArrayList<>(categoryService.getAll());
         req.setAttribute("cateList", cateList);
-        RequestDispatcher dispatcher=req.getRequestDispatcher("/views/admin/listcategory.jsp");
+        RequestDispatcher dispatcher=req.getRequestDispatcher("/views/admin/list-category.jsp");
         dispatcher.forward(req, resp);
     }
 

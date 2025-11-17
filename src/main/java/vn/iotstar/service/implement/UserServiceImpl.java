@@ -1,12 +1,15 @@
 package vn.iotstar.service.implement;
 
+import vn.iotstar.dao.TokenDao;
 import vn.iotstar.dao.UserDao;
+import vn.iotstar.dao.implement.TokenDaoimpl;
 import vn.iotstar.dao.implement.UserDaoImpl;
 import vn.iotstar.model.User;
 import vn.iotstar.service.UserService;
 
 public class UserServiceImpl implements UserService {
-    UserDaoImpl userDao=new UserDaoImpl();
+    UserDao userDao=new UserDaoImpl();
+    TokenDao tokenDao=new TokenDaoimpl();
     User user=null;
 
     @Override
@@ -57,5 +60,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public User get() {
         return this.user;
+    }
+    @Override
+    public boolean changePassword(String email, String newPassword) {
+        return userDao.changePassword(email, newPassword);
+    }
+    @Override
+    public boolean saveResetToken(String email, String token) {
+        return false;
+    }
+    @Override
+    public boolean sendResetPasswordEmail(String email, String resetLink) {
+        String subject = "Đặt lại mật khẩu";
+        String content = "Nhấp vào liên kết sau để đặt lại mật khẩu của bạn: " + resetLink;
+
+        return false;
     }
 }

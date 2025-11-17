@@ -1,4 +1,4 @@
-package vn.iotstar.util;
+package vn.iotstar.utils;
 
 public class Constant {
     public static final String SESSION_USERNAME = "username";
