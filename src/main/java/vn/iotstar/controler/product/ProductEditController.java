@@ -1,6 +1,11 @@
 package vn.iotstar.controler.product;
 
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.List;
+
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,9 +19,11 @@ import vn.iotstar.service.implement.CategoryServiceImpl;
 import vn.iotstar.service.implement.ProductServiceImpl;
 import vn.iotstar.utils.UploadImage;
 
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.List;
+@MultipartConfig(
+        fileSizeThreshold = 1024 * 1024,  // 1 MB
+        maxFileSize = 1024 * 1024 * 10,       // 10 MB
+        maxRequestSize = 1024 * 1024 * 15     // 15 MB
+)
 @WebServlet(urlPatterns = "/admin/product/edit")
 public class ProductEditController extends HttpServlet {
     CategoryService categoryService = new CategoryServiceImpl();
@@ -51,12 +58,24 @@ public class ProductEditController extends HttpServlet {
             boolean active = req.getParameter("active") != null;
             String oldImage = req.getParameter("oldImage");
 
-            // Xử lý upload file mới (nếu có)
-            Part filePart = req.getPart("image");
-            String image = UploadImage.saveImage(filePart,"");
+            StringBuilder images = new StringBuilder();
+            
+            // Xử lý upload nhiều file mới (nếu có)
+            for (Part part : req.getParts()) {
+                if (part.getName().equals("images") && part.getSize() > 0) {
+                    String image = UploadImage.saveImage(part, "products");
+                    if (image != null && !image.isEmpty()) {
+                        if (images.length() > 0) {
+                            images.append(";");
+                        }
+                        images.append(image);
+                    }
+                }
+            }
 
-            if (image == null || image.isEmpty()) {
-                image = oldImage;
+            // Nếu không upload ảnh mới, giữ ảnh cũ
+            if (images.length() == 0) {
+                images = new StringBuilder(oldImage);
             }
 
             // Tạo đối tượng Product
@@ -67,7 +86,7 @@ public class ProductEditController extends HttpServlet {
             product.setPrice(price);
             product.setSalePrice(salePrice);
             product.setQuantity(quantity);
-            product.setImage(image);
+            product.setImage(images.toString());
             product.setCategoryId(categoryId);
             product.setActive(active);
 

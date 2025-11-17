@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -124,11 +125,14 @@ zle"></i> Đang kinh doanh</p>
                                     <td>
                                         <c:choose>
                                             <c:when test="${not empty product.image}">
-                                                <c:url value="/image?fname=${product.image}" var="imgUrl" />
+                                                <c:set var="imageList" value="${fn:split(product.image, ';')}"/>
+                                                <c:set var="firstImage" value="${imageList[0]}"/>
+                                                <c:url value="/image?fname=${firstImage}" var="imgUrl" />
                                                 <img src="${imgUrl}"
                                                      class="product-img"
                                                      alt="${product.productName}"
-                                                     height="150" width="200">
+                                                     height="150" width="200"
+                                                     title="Có ${fn:length(imageList)} ảnh">
                                             </c:when>
 
                                             <c:otherwise>

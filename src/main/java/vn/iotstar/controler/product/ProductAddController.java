@@ -46,11 +46,30 @@ public class ProductAddController extends HttpServlet {
             int quantity = Integer.parseInt(req.getParameter("quantity"));
             int categoryId = Integer.parseInt(req.getParameter("categoryId"));
             boolean active = req.getParameter("active") != null;
+            
+            StringBuilder imageslist = new StringBuilder();
+            
+            // Xử lý upload nhiều file
+            for (Part part : req.getParts()) {
+                if (part.getName().equals("images") && part.getSize() > 0) {
+                    String image = UploadImage.saveImage(part, "products");
+                    if (image != null && !image.isEmpty()) {
+                        if (imageslist.length() > 0) {
+                            imageslist.append(";");
+                        }
+                        imageslist.append(image);
+                    }
+                }
+            }
 
-            // Xử lý upload file
-
-            Part filePart = req.getPart("image");
-            String image = UploadImage.saveImage(filePart,"");
+            // Kiểm tra xem có ảnh nào được upload không
+            if (imageslist.length() == 0) {
+                req.setAttribute("error", "Vui lòng chọn ít nhất một ảnh cho sản phẩm!");
+                List<Category> categories = categoryService.getAll();
+                req.setAttribute("categories", categories);
+                req.getRequestDispatcher("/views/admin/add-product.jsp").forward(req, resp);
+                return;
+            }
 
             // Tạo đối tượng Product
             Product product = new Product();
@@ -59,7 +78,7 @@ public class ProductAddController extends HttpServlet {
             product.setPrice(price);
             product.setSalePrice(salePrice);
             product.setQuantity(quantity);
-            product.setImage(image);
+            product.setImage(imageslist.toString());
             product.setCategoryId(categoryId);
             product.setActive(active);
 
@@ -72,7 +91,8 @@ public class ProductAddController extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             req.setAttribute("error", "Có lỗi xảy ra: " + e.getMessage());
-//            showAddForm(req, resp);
+            List<Category> categories = categoryService.getAll();
+            req.setAttribute("categories", categories);
             req.getRequestDispatcher("/views/admin/add-product.jsp").forward(req, resp);
         }
     }
